@@ -8,6 +8,7 @@ import org.apache.commons.lang3.LocaleUtils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
 
@@ -27,12 +28,14 @@ public abstract class Wheel {
     public NumberPickerView picker;
     public SimpleDateFormat format;
     SimpleDateFormat displayFormat;
+    TimeZone timeZone;
 
     public Wheel(final PickerView pickerView, final int id) {
         this.id = id;
         this.self = this;
         this.pickerView = pickerView;
         this.picker = pickerView.findViewById(id);
+        this.timeZone = TimeZone.getDefault();
         clearValues();
         picker.setOnValueChangedListener(new NumberPickerView.OnValueChangeListener() {
             @Override
@@ -45,6 +48,7 @@ public abstract class Wheel {
     private void clearValues(){
         this.displayFormat = new SimpleDateFormat(getFormatTemplate(), pickerView.locale);
         this.format = new SimpleDateFormat(getFormatTemplate(), LocaleUtils.toLocale("en_US"));
+        this.format.setTimeZone(this.timeZone);
         this.values = new ArrayList<>();
         this.displayValues= new ArrayList<>();
     }
@@ -79,6 +83,10 @@ public abstract class Wheel {
             if(picker.getValue() == 0) picker.setValue(index);
             else picker.smoothScrollToValue(index);
         }
+    }
+
+    public void setTimeZone(TimeZone timeZone) {
+        this.timeZone = timeZone;
     }
 
     public void refresh() {

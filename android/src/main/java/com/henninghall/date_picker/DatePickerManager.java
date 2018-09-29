@@ -77,6 +77,11 @@ public class DatePickerManager extends SimpleViewManager<PickerView>  {
     if (interval > 1) view.setMinuteInterval(interval);
   }
 
+  @ReactProp(name = "timeZoneOffsetInMinutes")
+  public void setTimeZoneOffsetInMinutes(PickerView view, @Nullable int minutes) throws Exception {
+    view.setTimeZoneOffsetInMinutes(minutes);
+  }
+
   @Override
   protected void onAfterUpdateTransaction(PickerView view) {
     super.onAfterUpdateTransaction(view);

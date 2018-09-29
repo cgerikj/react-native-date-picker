@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
@@ -43,6 +44,7 @@ public class PickerView extends RelativeLayout {
     public MinutesWheel minutesWheel;
     private AmPmWheel ampmWheel;
     public int minuteInterval = 1;
+    public TimeZone timeZone;
     public Locale locale;
     public Mode mode;
     public Style style;
@@ -66,6 +68,8 @@ public class PickerView extends RelativeLayout {
         wheelsWrapper.setWillNotDraw(false);
 
         locale = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP ? Locale.forLanguageTag("en") : Locale.getDefault();
+
+        timeZone = TimeZone.getDefault();
 
         yearWheel = new YearWheel( this, R.id.year);
         monthWheel = new MonthWheel( this, R.id.month);
@@ -149,9 +153,25 @@ public class PickerView extends RelativeLayout {
         requireDisplayValueUpdate = true;
     }
 
+    public void setTimeZoneOffsetInMinutes(int minutes) {
+        TimeZone offsetTimeZone = TimeZone.getDefault();
+        offsetTimeZone.setRawOffset(minutes*1000*60);
+        System.out.println(offsetTimeZone.getRawOffset());
+        this.timeZone = offsetTimeZone;
+
+        yearWheel.setTimeZone(timeZone);
+        monthWheel.setTimeZone(timeZone);
+        dateWheel.setTimeZone(timeZone);
+        dayWheel.setTimeZone(timeZone);
+        hourWheel.setTimeZone(timeZone);
+        minutesWheel.setTimeZone(timeZone);
+        ampmWheel.setTimeZone(timeZone);
+    }
+
     // Rounding cal to closest minute interval
     public Calendar getInitialDate() {
         Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(this.timeZone);
         if(minuteInterval <= 1) return cal;
         int exactMinute = Integer.valueOf(minutesWheel.format.format(cal.getTime()));
         int diffSinceLastInterval = exactMinute % minuteInterval;
