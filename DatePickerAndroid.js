@@ -10,7 +10,7 @@ class DatePickerAndroid extends React.Component {
         minuteInterval: 1,
      };
   
-    _onChange = e => this.props.onDateChange(new Date(parseInt(e.nativeEvent.date)));
+    _onChange = e => this.props.onDateChange && this.props.onDateChange(new Date(parseInt(e.nativeEvent.date)));
     _maximumDate = () => this.props.maximumDate && this.props.maximumDate.getTime();
     _minimumDate = () => this.props.minimumDate && this.props.minimumDate.getTime();
     render = () => (
