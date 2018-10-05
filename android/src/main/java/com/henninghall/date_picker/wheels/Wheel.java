@@ -47,6 +47,7 @@ public abstract class Wheel {
 
     private void clearValues(){
         this.displayFormat = new SimpleDateFormat(getFormatTemplate(), pickerView.locale);
+        this.displayFormat.setTimeZone(this.timeZone);
         this.format = new SimpleDateFormat(getFormatTemplate(), LocaleUtils.toLocale("en_US"));
         this.format.setTimeZone(this.timeZone);
         this.values = new ArrayList<>();
@@ -87,6 +88,7 @@ public abstract class Wheel {
 
     public void setTimeZone(TimeZone timeZone) {
         this.timeZone = timeZone;
+        refresh();
     }
 
     public void refresh() {

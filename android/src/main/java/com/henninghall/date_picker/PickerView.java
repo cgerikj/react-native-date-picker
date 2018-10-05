@@ -9,6 +9,7 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.henninghall.date_picker.wheelFunctions.AnimateToDate;
 import com.henninghall.date_picker.wheelFunctions.Refresh;
 import com.henninghall.date_picker.wheelFunctions.SetDate;
+import com.henninghall.date_picker.wheelFunctions.SetTimeZone;
 import com.henninghall.date_picker.wheelFunctions.UpdateVisibility;
 import com.henninghall.date_picker.wheelFunctions.WheelFunction;
 import com.henninghall.date_picker.wheels.AmPmWheel;
@@ -155,17 +156,12 @@ public class PickerView extends RelativeLayout {
 
     public void setTimeZoneOffsetInMinutes(int minutes) {
         TimeZone offsetTimeZone = TimeZone.getDefault();
-        offsetTimeZone.setRawOffset(minutes*1000*60);
-        System.out.println(offsetTimeZone.getRawOffset());
+        offsetTimeZone.setRawOffset((minutes-60)*1000*60);
         this.timeZone = offsetTimeZone;
 
-        yearWheel.setTimeZone(timeZone);
-        monthWheel.setTimeZone(timeZone);
-        dateWheel.setTimeZone(timeZone);
-        dayWheel.setTimeZone(timeZone);
-        hourWheel.setTimeZone(timeZone);
-        minutesWheel.setTimeZone(timeZone);
-        ampmWheel.setTimeZone(timeZone);
+        applyOnAllWheels(new SetTimeZone(this.timeZone));
+
+        requireDisplayValueUpdate = true;
     }
 
     // Rounding cal to closest minute interval
